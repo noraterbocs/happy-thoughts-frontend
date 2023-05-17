@@ -7,6 +7,7 @@ export const thoughts = createSlice({
     allThoughts: [],
     singleThought: [],
     newThought: [],
+    deletedSingleThought: [],
     page: 1,
     limit: 20
 
@@ -32,12 +33,16 @@ export const thoughts = createSlice({
       state.newThought = action.payload
       //   state.allThoughts = [...state.allThoughts, action.payload];
       console.log(action.payload)
+    },
+    setDeleteSingleThought: (state, action) => {
+      state.deletedSingleThought = action.payload
+      console.log(action.payload)
     }
   }
 });
 
-// a thunk to handle the API request
-export const fetchThoughts = (page) => {
+// Fetch all thoughts
+export const fetchThoughts = (limit) => {
   return (dispatch) => {
     dispatch(ui.actions.setLoading(true))
     const options = {
@@ -47,7 +52,7 @@ export const fetchThoughts = (page) => {
         'Content-Type': 'application/json'
       }
     }
-    fetch(`https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts?page=${page}`, options)
+    fetch(`https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts?limit=${limit}`, options)
       .then((response) => response.json())
       .then((json) => {
         dispatch(thoughts.actions.setAllThoughts(json.body.result))
@@ -56,7 +61,8 @@ export const fetchThoughts = (page) => {
   };
 };
 
-export const postNewThought = (newText, newName) => {
+// Post a new thought
+export const postNewThought = (newText, newName, newCategory) => {
   return (dispatch) => {
     dispatch(ui.actions.setLoading(true))
     const options = {
@@ -65,7 +71,7 @@ export const postNewThought = (newText, newName) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ text: newText, name: newName })
+      body: JSON.stringify({ text: newText, name: newName, category: newCategory })
     }
     fetch('https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts', options)
       .then((response) => response.json())
@@ -76,15 +82,37 @@ export const postNewThought = (newText, newName) => {
   };
 };
 
-export const fetchSingleThought = (id) => {
+// PATCH - like a thought
+export const likeSingleThought = (id) => {
   return (dispatch) => {
     dispatch(ui.actions.setLoading(true))
     const options = {
-      method: 'GET',
+      method: 'PATCH',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       }
+    }
+    fetch(`https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts/${id}/like`, options)
+      .then((response) => response.json())
+      .then((json) => {
+        dispatch(thoughts.actions.setSingleThought(json))
+      })
+      .finally(() => dispatch(ui.actions.setLoading(false)))
+  };
+}
+
+// PATCH a thought
+export const patchSingleThought = (id, editedText, editedCategory) => {
+  return (dispatch) => {
+    dispatch(ui.actions.setLoading(true))
+    const options = {
+      method: 'PATCH',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text: editedText, category: editedCategory })
     }
     fetch(`https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts/${id}`, options)
       .then((response) => response.json())
@@ -95,27 +123,7 @@ export const fetchSingleThought = (id) => {
   };
 }
 
-// PATCH
-export const patchSingleThought = (id) => {
-  return (dispatch) => {
-    dispatch(ui.actions.setLoading(true))
-    const options = {
-      method: 'PATCH',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-    fetch(`https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts/${id}`, options)
-      .then((response) => response.json())
-      .then((json) => {
-        dispatch(thoughts.actions.setSingleThought(json.body.result))
-      })
-      .finally(() => dispatch(ui.actions.setLoading(false)))
-  };
-}
-
-// DELETE
+// DELETE a thought
 export const deleteSingleThought = (id) => {
   return (dispatch) => {
     dispatch(ui.actions.setLoading(true))
@@ -128,9 +136,9 @@ export const deleteSingleThought = (id) => {
     }
     fetch(`https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts/${id}`, options)
       .then((response) => response.json())
-    //   .then((json) => {
-    //     dispatch(thoughts.actions.setSingleThought(json))
-    //   })
+      .then((json) => {
+        dispatch(thoughts.actions.setDeleteSingleThought(json))
+      })
       .finally(() => dispatch(ui.actions.setLoading(false)))
   };
 }
