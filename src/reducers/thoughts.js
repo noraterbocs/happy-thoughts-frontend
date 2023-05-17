@@ -8,17 +8,19 @@ export const thoughts = createSlice({
     singleThought: [],
     newThought: [],
     deletedSingleThought: [],
-    page: 1,
-    limit: 20
+    pageCount: 1,
+    limit: 5,
+    totalPages: 0
 
   },
   reducers: {
     setAllThoughts: (state, action) => {
-      state.allThoughts = action.payload
+      state.allThoughts = action.payload.result
+      state.totalPages = action.payload.totalPages
       console.log(action.payload)
     },
     setPage: (state, action) => {
-      state.page = action.payload
+      state.pageCount = action.payload
       console.log(action.payload)
     },
     setLimit: (state, action) => {
@@ -42,7 +44,7 @@ export const thoughts = createSlice({
 });
 
 // Fetch all thoughts
-export const fetchThoughts = (limit) => {
+export const fetchThoughts = (pageCount, limit) => {
   return (dispatch) => {
     dispatch(ui.actions.setLoading(true))
     const options = {
@@ -52,10 +54,10 @@ export const fetchThoughts = (limit) => {
         'Content-Type': 'application/json'
       }
     }
-    fetch(`https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts?limit=${limit}`, options)
+    fetch(`https://project-happy-thoughts-api-lyyw357xda-lz.a.run.app/thoughts?page=${pageCount}&limit=${limit}`, options)
       .then((response) => response.json())
       .then((json) => {
-        dispatch(thoughts.actions.setAllThoughts(json.body.result))
+        dispatch(thoughts.actions.setAllThoughts(json.body))
       })
       .finally(() => dispatch(ui.actions.setLoading(false)))
   };
