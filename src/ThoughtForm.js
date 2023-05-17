@@ -24,10 +24,10 @@ export const ThoughtForm = () => {
   }
 
   return (
-    <Container maxWidth="xs" spacing={{ xs: 1, lg: 2 }} sx={{ display: 'flex', flexDirection: 'column', border: '5px solid grey', gap: '2em', justifyContent: 'space-around', padding: '2em' }}>
+    <Container maxWidth="xs" spacing={{ xs: 1, lg: 2 }} sx={{ display: 'flex', flexDirection: 'column', border: '1px dashed grey', gap: '2em', justifyContent: 'space-around', padding: '2em' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }}>
         <TextField id="outlined-basic" label="Name:" variant="outlined" value={newName} onChange={(e) => setNewName(e.target.value)} />
-        <FormControl sx={{ minWidth: 120 }}>
+        <FormControl sx={{ minWidth: '50%' }}>
           <InputLabel id="demo-simple-select-helper-label">Category:</InputLabel>
           <Select id="demo-simple-select-helper" labelId="demo-simple-select-helper-label" value={newCategory} onChange={selectCategory} label="Age" displayEmpty>
             <MenuItem value="" disabled />

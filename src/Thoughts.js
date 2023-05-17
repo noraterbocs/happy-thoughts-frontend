@@ -34,7 +34,7 @@ export const Thoughts = () => {
       loadMore={loadMore}
       hasMore={allThoughtsList.length > 0 && allThoughtsList.length % limit === 0}
       loader={<div className="loader" key={0}>Loading ...</div>}>
-      <Container maxWidth="lg" sx={{ overflow: 'auto' }}>
+      <Container maxWidth="lg" sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', gap: '2em' }}>
         <ThoughtForm />
         <Container maxWidth="xs">
           {allThoughtsList.length !== 0
