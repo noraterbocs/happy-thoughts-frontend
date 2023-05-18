@@ -36,7 +36,7 @@ export const Thoughts = () => {
       loader={<div className="loader" key={0}>Loading ...</div>}>
       <Container maxWidth="lg" sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', gap: '2em' }}>
         <ThoughtForm />
-        <Container maxWidth="xs" sx={{ display: 'flex', flexDirection: 'column', gap: '1em' }}>
+        <Container maxWidth="xs" sx={{ display: 'flex', flexDirection: 'column', gap: '1em', marginBottom: '2em' }}>
           {allThoughtsList.length !== 0
         && allThoughtsList !== undefined
         && allThoughtsList.map((thought) => {
