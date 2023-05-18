@@ -11,35 +11,33 @@ export const thoughts = createSlice({
     pageCount: 1,
     limit: 5,
     totalPages: 0
+    // errorMessage: false
 
   },
   reducers: {
     setAllThoughts: (state, action) => {
       state.allThoughts = action.payload.result
       state.totalPages = action.payload.totalPages
-      console.log(action.payload)
     },
     setPage: (state, action) => {
       state.pageCount = action.payload
-      console.log(action.payload)
     },
     setLimit: (state, action) => {
       state.limit = action.payload
-      console.log(action.payload)
     },
     setSingleThought: (state, action) => {
       state.singleThought = action.payload
-      console.log(action.payload)
     },
     setNewThought: (state, action) => {
       state.newThought = action.payload
-      //   state.allThoughts = [...state.allThoughts, action.payload];
-      console.log(action.payload)
     },
     setDeleteSingleThought: (state, action) => {
       state.deletedSingleThought = action.payload
-      console.log(action.payload)
     }
+    // setErrorMessage: (state, action) => {
+    //   state.errorMessage = true
+    //   console.log(action.payload)
+    // }
   }
 });
 

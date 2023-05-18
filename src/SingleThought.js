@@ -4,14 +4,17 @@ import { Tooltip, IconButton, Grid, Typography, TextareaAutosize, TextField, Con
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { formatDistance } from 'date-fns';
 import ClearIcon from '@mui/icons-material/Clear';
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteSingleThought, likeSingleThought, patchSingleThought } from 'reducers/thoughts';
+import { Likes } from 'Likes';
 
 export const SingleThought = ({ thought }) => {
   const [editedText, setEditedText] = useState('')
   const [editedCategory, setEditedCategory] = useState('')
+  const [showLikes, setShowLikes] = useState(false);
   const dispatch = useDispatch()
+  const playerRef = useRef();
   const changeSingleThought = (e, id, changeType) => {
     const { value } = e.target;
     if (changeType === 'text') {
@@ -25,11 +28,16 @@ export const SingleThought = ({ thought }) => {
   const patchSingleThoughtAPI = (id) => {
     dispatch(patchSingleThought(id, editedText[id], editedCategory[id]))
   }
+
+  const addLike = () => {
+    dispatch(likeSingleThought(thought._id))
+    setShowLikes(true)
+    playerRef.current.play();
+  }
   return (
     <Container>
-      <Grid container spacing={2} sx={{ border: '1px dashed grey', padding: '2em 1em', position: 'relative' }} key={thought._id}>
-        <Grid item xs={4}><Typography variant="body1">{thought.name}</Typography></Grid>
-        <Grid item xs={8}>
+      <Grid container spacing={2} mt={0} sx={{ border: '1px dashed grey', padding: '2em 1em', position: 'relative', margin: '0', width: '100%', bgcolor: '#fff', opacity: '0.8', boxShadow: '12px 12px 2px 1px #7f7b7b' }} key={thought._id}>
+        <Grid item xs={12}>
           <TextField variant="standard" value={editedCategory[thought._id] || thought.category} onChange={(e) => changeSingleThought(e, thought._id, 'category')} onBlur={() => patchSingleThoughtAPI(thought._id)} />
         </Grid>
         <Grid item xs={12}>
@@ -41,16 +49,18 @@ export const SingleThought = ({ thought }) => {
             onChange={(e) => changeSingleThought(e, thought._id, 'text')}
             onBlur={() => patchSingleThoughtAPI(thought._id)} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           <Tooltip title="Like">
-            <IconButton onClick={() => dispatch(likeSingleThought(thought._id))}>
+            <IconButton sx={{ fontSize: '1em', position: 'relative' }} onClick={() => addLike()}>
+              <span>  {thought.heart} x </span>
               <FavoriteIcon />
-              {thought.heart}
+              {showLikes && <Likes playerRef={playerRef} />}
             </IconButton>
           </Tooltip>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={8}>
           <Typography variant="body2">
+            <span>Sent by {thought.name} </span>
             {formatDistance(new Date(thought.createdAt), Date.now(), { addSuffix: true })}
           </Typography>
         </Grid>
