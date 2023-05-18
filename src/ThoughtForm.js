@@ -49,7 +49,8 @@ export const ThoughtForm = () => {
       <TextareaAutosize
         minRows={6}
         value={newText}
-        onChange={(e) => setNewText(e.target.value)} />
+        onChange={(e) => setNewText(e.target.value)}
+        placeholder="Add your thought here" />
       <div className="textarea-footer">
         {errorMsg && <Alert severity="error">Your message has to be between 5 and 140 characters!</Alert>}
         <Typography variant="body2" className="character-counter">{newText.length}/140 characters left</Typography>

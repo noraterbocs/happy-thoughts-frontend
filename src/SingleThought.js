@@ -44,6 +44,7 @@ export const SingleThought = ({ thought }) => {
           <TextareaAutosize
             variant="body1"
             minRows={5}
+            maxRows={5}
             sx={{ width: '100%' }}
             value={editedText[thought._id] || thought.text}
             onChange={(e) => changeSingleThought(e, thought._id, 'text')}
