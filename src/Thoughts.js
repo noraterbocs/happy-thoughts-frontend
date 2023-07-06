@@ -15,6 +15,7 @@ export const Thoughts = () => {
   const singleThought = useSelector((store) => store.thoughts.singleThought)
   const newThought = useSelector((store) => store.thoughts.newThought)
   const limit = useSelector((store) => store.thoughts.limit)
+  const loading = useSelector((store) => store.ui.isLoading)
 
   const fetchthoughtsAPI = () => {
     dispatch(fetchThoughts(1, limit))
@@ -35,7 +36,7 @@ export const Thoughts = () => {
       hasMore={allThoughtsList.length > 0 && allThoughtsList.length % limit === 0}
       loader={<div className="loader" key={0}>Loading ...</div>}>
       <Container maxWidth="lg" sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', gap: '2em' }}>
-        <ThoughtForm />
+        {!loading && <ThoughtForm />}
         <Container maxWidth="xs" sx={{ display: 'flex', flexDirection: 'column', gap: '1em', marginBottom: '2em' }}>
           {allThoughtsList.length !== 0
         && allThoughtsList !== undefined
